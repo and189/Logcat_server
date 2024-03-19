@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ device_name }} Logs</title>
+    <style>
+        #log-container {
+            height: 500px;
+            overflow-y: scroll;
+            background-color: #f0f0f0;
+            padding: 10px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ device_name }} Logs</h1>
+    <div id="log-container"></div>
+
+    <script>
+        var logContainer = document.getElementById("log-container");
+        var eventSource = new EventSource("/logs/{{ device_name }}");
+
+        eventSource.onmessage = function(event) {
+            if (event.data) {
+                var newLine = document.createElement("div");
+                newLine.textContent = event.data;
+                logContainer.appendChild(newLine);
+                logContainer.scrollTop = logContainer.scrollHeight;
+            }
+        };
+    </script>
+</body>
+</html>
